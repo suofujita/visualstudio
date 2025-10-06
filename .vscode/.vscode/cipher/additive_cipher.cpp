@@ -11,6 +11,7 @@ int getValuePlaintext(char p) {
             return i;
         }
     }
+    return -1;
 }
 
 int getValueCiphertext(char c){
@@ -19,27 +20,28 @@ int getValueCiphertext(char c){
             return i;
         }
     }
+    return -1;
 }
 
 string encryption(string plaintext, int key){
     string ciphertext;
     for(int i=0; i< plaintext.length(); i++) {
         int value = getValuePlaintext(plaintext[i]);
+        if(value == -1) continue; // skip invalid char
         int id = (value + key) % 26;
         ciphertext += ciphertext_table[id];
     }
-    ciphertext += '\0';
     return ciphertext;
 }
 
 string decryption(string ciphertext, int key){
     string plaintext;
-    for(int i=0; ciphertext[i] != '\0'; i++) {
+    for(int i=0; i < ciphertext.length(); i++) {
         int value = getValueCiphertext(ciphertext[i]);
+        if(value == -1) continue; // skip invalid char
         int id = ((value - key) % 26 + 26)%26;
         plaintext += plaintext_table[id];
     }
-    plaintext += '\0';
     return plaintext;
 }
 int main(){
